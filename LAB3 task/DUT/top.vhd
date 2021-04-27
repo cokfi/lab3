@@ -20,16 +20,5 @@ architecture arc_sys of top is
 begin
 	L0 : Control port map(rst,clk,Input,One,OPCin,OPC2,OPC1,Ld,Bin,Cout);
 	L1 : Datapath generic map (n) port map(clk,OPCin,OPC2,OPC1,Ld,Bin,Cout,DATAin,Input,One,DATAout);
-	
-				
-	
-	
-	
+
 end arc_sys;
-
-
-
-
-
-
-

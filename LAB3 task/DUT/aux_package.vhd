@@ -37,12 +37,12 @@ package aux_package is
 ---------------------------ALU---------------------------------
 	component ALU is
 	GENERIC (n : INTEGER := 8);     
-	PORT (	 ALUFN: IN STD_LOGIC_VECTOR (1 DOWNTO 0); -- [1,dc]=Logical, [0,1]= shift, [0,0]= AdderSub.
-			 logical,shifter,addersub: IN STD_LOGIC_VECTOR (n-1 DOWNTO 0); -- Input
-             Cin: in STD_LOGIC_VECTOR(1 downto 0); --carry in 
-             ALUout: OUT STD_LOGIC_VECTOR(n-1 downto 0); -- Result
-			 Zero,Neg,Carry: OUT STD_LOGIC -- Flags
-        );
+	GENERIC ( n : INTEGER := 8);
+	PORT (    ALUFN: IN STD_LOGIC_VECTOR (2 DOWNTO 0); 
+			  --ALUFN := [0,0,0]=A ,[0,0,1]=A+B, [0,1,0]=A-B, [0,1,1]=AorB, [1,0,0]= AandB, [1,0,1]=AxorB 
+			  A : IN STD_LOGIC; -- set ALUout as vector_A
+			  vector_A,logical,addersub: IN STD_LOGIC_VECTOR (n-1 DOWNTO 0); -- Input
+			  ALUout: OUT STD_LOGIC_VECTOR(n-1 downto 0)); -- Result
 	end component;	
 --------------------------Logical------------------------------
 	component Logical is
