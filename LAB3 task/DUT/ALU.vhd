@@ -22,9 +22,9 @@ begin
     out_select : process (ALUFN_A, vector_A, logical,addersub) is
     begin
     case ALUFN_A is
-    when "0010"|"0010" =>
+    when "001Z"|"001Z" =>
     ALUout <= addersub;
-    when "0110"to"1010" =>
+    when "011Z"to"101Z" =>
     ALUout <= logical;
     when others =>
     ALUout <= vector_A;
