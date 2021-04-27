@@ -18,16 +18,17 @@ entity Datapath is
 end Datapath;
 ------------- complete the Datapath Unit Architecture code --------------
 architecture arc_sys of Datapath is
-signal reg_c,reg_b,ALUout:STD_LOGIC_VECTOR(n-1 downto 0); 
+signal reg_c,reg_b,ALUout,:STD_LOGIC_VECTOR(n-1 downto 0); 
 signal reg_opc,ALUFN:STD_LOGIC_VECTOR(2 downto 0); 
-signal enable_dec,A std_logic;
+signal enable_dec,A,ctr_input std_logic;
 alias Opcode :std_logic_vector(2 downto 0) is DATAin(2 downto 0);
 );
 begin
-	One<= and DATAin ;
+	ctr_input<= and DATAin ;
 	ALUFN<= reg_opc when(OPC2='1') else "ZZZ";
 	A<='1' when (OPC1='1') else 'Z';
-	
+
+
 ------------------------counter process--------------------------
 d_counter : process(clk)
 begin
@@ -43,12 +44,17 @@ end process;
 reg_opc_proc : process(clk)
 begin
 	if (clk'event and clk='1') then -- rising edge
-		if (OPCin='1')
-			reg_opc <=Opcode;
+		if (OPCin='1') --register OPC
+			reg_opc <= Opcode;
 		end if;
-		if (Bin='1')
-			reg_b <=ALUout;
-	end if;
+		if (Bin='1') --register B
+			reg_b <= ALUout;
+		end if;
+		if (Cout='1') --register C
+			DATAout < =reg_c; -- out
+		else
+			reg_c<= reg_b; --in every operation cycle
+		end if;
 	end if;
 end process;
 	
