@@ -1,6 +1,7 @@
 LIBRARY ieee;
 USE ieee.std_logic_1164.all;
 USE ieee.std_logic_unsigned.all;
+USE work.aux_package.all;
 -------------------------------------------------------------
 entity Datapath is
 	generic (
@@ -17,10 +18,12 @@ entity Datapath is
 end Datapath;
 ------------- complete the Datapath Unit Architecture code --------------
 architecture arc_sys of Datapath is
-
-	
+signal reg_c,reg_b:STD_LOGIC_VECTOR(n-1 downto 0); 
+signal reg_opc:STD_LOGIC_VECTOR(2 downto 0); 
 begin
-	
+	One<= and DATAin ;
+
+
 	
 
 
