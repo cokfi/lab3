@@ -4,9 +4,7 @@ USE ieee.std_logic_unsigned.all;
 USE work.aux_package.all;
 -------------------------------------------------------------
 entity Datapath is
-	generic (
-		n : positive := 8 
-	);
+	generic (n : positive := 8 );
 	port(
 		clk : in std_logic;
 		OPCin,OPC2,OPC1,Ld,Bin,Cout : in std_logic;
@@ -18,7 +16,8 @@ entity Datapath is
 end Datapath;
 ------------- complete the Datapath Unit Architecture code --------------
 architecture arc_sys of Datapath is
-signal reg_c,reg_b,ALUout,:STD_LOGIC_VECTOR(n-1 downto 0); 
+signal reg_c,reg_b,ALUout,counter,one_before_not:STD_LOGIC_VECTOR(n-1 downto 0);
+signal addersub_result,logical_result:STD_LOGIC_VECTOR(n-1 downto 0);
 signal reg_opc,ALUFN:STD_LOGIC_VECTOR(2 downto 0); 
 signal enable_dec,A,ctr_input std_logic;
 alias Opcode :std_logic_vector(2 downto 0) is DATAin(2 downto 0);
@@ -27,7 +26,11 @@ begin
 	ctr_input<= and DATAin ;
 	ALUFN<= reg_opc when(OPC2='1') else "ZZZ";
 	A<='1' when (OPC1='1') else 'Z';
-
+	one_before_not(0) <= not counter(0);
+	create_one:	for i in 1 to n-1 generate
+		one_before_not(i) <= counter(i);
+end generate;
+	One <= nor one_before_not);
 
 ------------------------counter process--------------------------
 d_counter : process(clk)
@@ -57,13 +60,27 @@ begin
 		end if;
 	end if;
 end process;
-	
-
-
-	
-	
-	
-	
+-----------------------AdderSub---------------------------
+AdderSubaba : AdderSub generic map (n)port map(
+			sctr => ALUFN(1), --'1' SUB , '0' ADD
+			x => DATAin,
+			y => reg_b,
+			s => addersub_result);	
+-----------------------Logical----------------------------			
+Logiloko : Logical generic map (n) port map( -- x and y are crossed twice duo to a loko programmer
+			ALUFN => ALUFN(1 downto 0),
+			x => DATAin,
+			y => reg_b,
+			result => logical_result);
+-----------------------ALU--------------------------------					
+ALUFORU  : ALU generic map (n) port map(
+			ALUFN => ALUFN(2 downto 0), 
+			--ALUFN := [0,0,0]=A ,[0,0,1]=A+B, [0,1,0]=A-B, [0,1,1]=AorB, [1,0,0]= AandB, [1,0,1]=AxorB 
+			A => A,
+			vector_A => DATAin,
+			logical => logical_result
+			addersub => addersub_result,
+			ALUout=>ALUout);
 end arc_sys;
 
 
