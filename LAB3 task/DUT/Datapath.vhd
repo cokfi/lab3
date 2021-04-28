@@ -16,21 +16,21 @@ entity Datapath is
 end Datapath;
 ------------- complete the Datapath Unit Architecture code --------------
 architecture arc_sys of Datapath is
-signal reg_c,reg_b,ALUout,counter,one_before_not:STD_LOGIC_VECTOR(n-1 downto 0);
+signal reg_c,reg_b,ALUout,counter,one_before_nor:STD_LOGIC_VECTOR(n-1 downto 0);
 signal addersub_result,logical_result:STD_LOGIC_VECTOR(n-1 downto 0);
 signal reg_opc,ALUFN:STD_LOGIC_VECTOR(2 downto 0); 
-signal enable_dec,A,ctr_input std_logic;
+signal A std_logic;
 alias Opcode :std_logic_vector(2 downto 0) is DATAin(2 downto 0);
 );
 begin
-	ctr_input<= and DATAin ;
-	ALUFN<= reg_opc when(OPC2='1') else "ZZZ";
-	A<='1' when (OPC1='1') else 'Z';
-	one_before_not(0) <= not counter(0);
+	Input<= or DATAin ;
+	ALUFN<= reg_opc when(OPC2='1') else "ZZZ";--tristate std_logic_vector
+	A<='1' when (OPC1='1') else 'Z'; --tristate
+	one_before_nor(0) <= not counter(0);
 	create_one:	for i in 1 to n-1 generate
-		one_before_not(i) <= counter(i);
+		one_before_nor(i) <= counter(i);
 end generate;
-	One <= nor one_before_not);
+	One <= nor one_before_nor;
 
 ------------------------counter process--------------------------
 d_counter : process(clk)
@@ -54,9 +54,9 @@ begin
 			reg_b <= ALUout;
 		end if;
 		if (Cout='1') --register C
-			DATAout < =reg_c; -- out
+			DATAout <= reg_c; -- out
 		else
-			reg_c<= reg_b; --in every operation cycle
+			reg_c<= reg_b; --Cin every operation cycle
 		end if;
 	end if;
 end process;
@@ -68,7 +68,7 @@ AdderSubaba : AdderSub generic map (n)port map(
 			s => addersub_result);	
 -----------------------Logical----------------------------			
 Logiloko : Logical generic map (n) port map( -- x and y are crossed twice duo to a loko programmer
-			ALUFN => ALUFN(1 downto 0),
+			ALUFN => ALUFN(2)&ALUFN(0),
 			x => DATAin,
 			y => reg_b,
 			result => logical_result);
@@ -76,7 +76,7 @@ Logiloko : Logical generic map (n) port map( -- x and y are crossed twice duo to
 ALUFORU  : ALU generic map (n) port map(
 			ALUFN => ALUFN(2 downto 0), 
 			--ALUFN := [0,0,0]=A ,[0,0,1]=A+B, [0,1,0]=A-B, [0,1,1]=AorB, [1,0,0]= AandB, [1,0,1]=AxorB 
-			A => A,
+			A => A, -- std_logic ,after the tristate
 			vector_A => DATAin,
 			logical => logical_result
 			addersub => addersub_result,
