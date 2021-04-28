@@ -51,11 +51,7 @@ begin
 		if (OPCin='1') then --register OPC
 			reg_opc <= Opcode;
 		end if;
-		if (Cout='1') then --register C
-			DATAout <= reg_c; -- provide output
-		else
-			reg_c<= reg_b; --Cin every operation cycle unlike Cout
-		end if;
+		reg_c<= reg_b; --Cin every operation cycle unlike Cout
 	end if;
 end process;
 
@@ -64,6 +60,8 @@ begin
 	if (clk'event and clk='0') then -- falling edge
 		if (Bin='1') then --register B
 			reg_b <= ALUout;
+		elsif (Cout='1') then --register C
+			DATAout <= reg_c; -- provide output
 		end if;
 	end if;
 end process;

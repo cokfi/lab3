@@ -61,7 +61,6 @@ package aux_package is
 	GENERIC (n : INTEGER := 8);
 	PORT (    sctr: IN STD_LOGIC; -- subtractor control , ADD = 0 , Sub=1
 			x,y: IN STD_LOGIC_VECTOR (n-1 DOWNTO 0);
-            cout: OUT STD_LOGIC;
             s: OUT STD_LOGIC_VECTOR(n-1 downto 0));
 	end component;	
 ----------------------------------------------------------------
