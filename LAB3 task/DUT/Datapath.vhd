@@ -19,7 +19,7 @@ architecture arc_sys of Datapath is
 signal reg_c,reg_b,ALUout,counter,one_before_nor:STD_LOGIC_VECTOR(n-1 downto 0);
 signal addersub_result,logical_result:STD_LOGIC_VECTOR(n-1 downto 0);
 signal reg_opc,ALUFN:STD_LOGIC_VECTOR(2 downto 0); 
-signal A std_logic;
+signal A std_logic; -- enable moving DATAin into ALUout
 alias Opcode :std_logic_vector(2 downto 0) is DATAin(2 downto 0);
 );
 begin
@@ -44,19 +44,25 @@ begin
 	end if;
 end process;
 ------------------------Registers process--------------------------
-reg_opc_proc : process(clk)
+reg_opc_re : process(clk)
 begin
 	if (clk'event and clk='1') then -- rising edge
 		if (OPCin='1') --register OPC
 			reg_opc <= Opcode;
 		end if;
+		if (Cout='1') --register C
+			DATAout <= reg_c; -- provide output
+		else
+			reg_c<= reg_b; --Cin every operation cycle unlike Cout
+		end if;
+	end if;
+end process;
+
+reg_opc_fe : process(clk)
+begin
+	if (clk'event and clk='0') then -- falling edge
 		if (Bin='1') --register B
 			reg_b <= ALUout;
-		end if;
-		if (Cout='1') --register C
-			DATAout <= reg_c; -- out
-		else
-			reg_c<= reg_b; --Cin every operation cycle
 		end if;
 	end if;
 end process;
