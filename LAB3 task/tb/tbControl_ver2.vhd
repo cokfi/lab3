@@ -8,7 +8,7 @@ entity tbControl is
 	constant n : integer := 8;
 end tbControl;
 
-architecture rtb of tb is
+architecture ctb of tbControl is
 	signal rst,clk,Input,One,OPCin,OPC2,OPC1,Ld,Bin,Cout : std_logic;
 	
 begin
@@ -37,3 +37,4 @@ begin
             wait for 250 ns;--250ns
             One <= '1';
         end process;
+end ctb ;
