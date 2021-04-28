@@ -24,7 +24,7 @@ begin
 		elsif (clk'event and clk='1') then
 			pr_state <= nx_state;
 		end if;
-	end process
+	end process;
 ----Upper Section:-------------
 	process(Input,One,pr_state)
 	begin 
@@ -43,21 +43,21 @@ begin
 					end if;
 				
 				when SetN =>
-					OPCin='0';
-					OPC2='0';
-					OPC1='0';
-					Ld='1';
-					Bin='0';
-					Cout='0';
+					OPCin<='0';
+					OPC2<='0';
+					OPC1<='0';
+					Ld<='1';
+					Bin<='0';
+					Cout<='0';
 					nx_state <= First;
 							
 				when First =>
-					OPCin='0';
-					OPC2='0';
-					OPC1='1';
-					Ld='0';
-					Bin='1';
-					Cout='0';
+					OPCin<='0';
+					OPC2<='0';
+					OPC1<='1';
+					Ld<='0';
+					Bin<='1';
+					Cout<='0';
 					if (One='0') then
 						nx_state<=Operate;
 					else
@@ -65,12 +65,12 @@ begin
 					end if;
 
 				when Operate =>
-					OPCin='0';
-					OPC2='1';
-					OPC1='0';
-					Ld='0';
-					Bin='1';
-					Cout='0';
+					OPCin<='0';
+					OPC2<='1';
+					OPC1<='0';
+					Ld<='0';
+					Bin<='1';
+					Cout<='0';
 					if (One='0') then
 						nx_state<=Operate;
 					else
@@ -99,7 +99,7 @@ begin
 						nx_state<=Idle;
 					end if;
 			end case;
-	end process
+	end process;
 end arc_sys;
 
 

@@ -19,11 +19,11 @@ architecture arc_sys of Datapath is
 signal reg_c,reg_b,ALUout,counter,one_before_nor:STD_LOGIC_VECTOR(n-1 downto 0);
 signal addersub_result,logical_result:STD_LOGIC_VECTOR(n-1 downto 0);
 signal reg_opc,ALUFN:STD_LOGIC_VECTOR(2 downto 0); 
-signal A std_logic; -- enable moving DATAin into ALUout
+signal A : std_logic; -- enable moving DATAin into ALUout
 alias Opcode :std_logic_vector(2 downto 0) is DATAin(2 downto 0);
-);
+
 begin
-	Input<= or DATAin ;
+	Input<= OR_REDUCE(DATAin);
 	ALUFN<= reg_opc when(OPC2='1') else "ZZZ";--tristate std_logic_vector
 	A<='1' when (OPC1='1') else 'Z'; --tristate
 	one_before_nor(0) <= not counter(0);
