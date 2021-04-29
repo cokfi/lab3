@@ -63,12 +63,14 @@ begin
         wait for 50 ns;--50 ns
         Bin<='1';
         wait for 450 ns;--500 ns
+        wait for 50 ns;
         Bin<='0';
     end process;
     CoutSim : process
     begin
         Cout<='0';
         wait for 500 ns;--500 ns
+        wait for 50 ns;
         Cout <='1';
     end process; 
 
