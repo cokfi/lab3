@@ -31,7 +31,9 @@ package aux_package is
 		DATAin  : in std_logic_vector(n-1 downto 0);
 		---------------------------------------------
 		Input,One : out std_logic;
-		DATAout : out std_logic_vector(n-1 downto 0)
+		DATAout : out std_logic_vector(n-1 downto 0);
+		counter_out,reg_b_out,reg_c_out: out STD_LOGIC_VECTOR(n-1 downto 0); -- testing
+		opc_out : out STD_LOGIC_VECTOR(2 downto 0)
 	);
   end component;
 ---------------------------ALU---------------------------------
