@@ -60,8 +60,8 @@ begin
     end process;
     LdSim : process
     begin
-        Ld <='1';
-        wait;
+        --Ld <='1';
+        --wait;
         Ld<='0';
         wait for 25 ns;
         wait for 200 ns;--150 ns
@@ -92,8 +92,9 @@ begin
 ---------Input Simulation ------------------	
     InputGen : process
     begin
+        wait for 37.5 ns; --TrigR = clk(t-T/4)= clk(t-12.5ns) hence, we read only after 37.5 ns
         DATAin<=conv_std_logic_vector(0,n); -- 2 zeros at the start
-        wait for 150 ns;
+        wait for 100 ns;
         DATAin<=conv_std_logic_vector(1,n);--Opcode for sum
         wait for 50 ns;
         DATAin<=conv_std_logic_vector(8,n);--m=8        

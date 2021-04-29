@@ -18,21 +18,24 @@ entity Datapath is
 end Datapath;
 ------------- complete the Datapath Unit Architecture code --------------
 architecture arc_sys of Datapath is
-signal reg_c,reg_b,ALUout,counter,one_before_nor,zeros:STD_LOGIC_VECTOR(n-1 downto 0);
+signal reg_c,reg_b,ALUout,counter,one_before_nor,or_reduce:STD_LOGIC_VECTOR(n-1 downto 0);
 signal addersub_result,logical_result:STD_LOGIC_VECTOR(n-1 downto 0);
 signal reg_opc,ALUFN:STD_LOGIC_VECTOR(2 downto 0); 
 signal A : std_logic; -- enable moving DATAin into ALUout
 alias Opcode :std_logic_vector(2 downto 0) is DATAin(2 downto 0);
 
 begin
-	zeros <= (others=>'0');
-	Input<= '0' when DATAin =zeros else '1';
+	or_reduce(0)<= Datain(0);-- n bits or
+	create_input:	for i in 1 to n-1 generate 
+		or_reduce(i) <= or_reduce(i-1) or Datain(i);
+	end generate;
+	Input<= or_reduce(n-1);
 	ALUFN<= reg_opc when(OPC2='1') else "ZZZ";--tristate std_logic_vector
 	A<='1' when (OPC1='1') else 'Z'; --tristate
 	one_before_nor(0) <= not counter(0);
 	create_one:	for i in 1 to n-1 generate
 		one_before_nor(i) <= counter(i);
-end generate;
+	end generate;
 	One <= nor one_before_nor;
 	--------------------------testing - delete later----------------------------
 	counter_out <=counter;
@@ -54,14 +57,14 @@ end process;
 ------------------------Registers process--------------------------
 reg_opc_re : process(clk)
 begin
-	if (clk'event and clk='1') then -- rising edge
+	if (clk'event and clk='0') then -- falling edge
 		if (OPCin='1') then --register OPC
 			reg_opc <= Opcode;
 		end if;
-		reg_c<= reg_b; --Cin every operation cycle unlike Cout
+		
 	end if;
 end process;
-
+reg_c<= reg_b; --Cin every operation cycle unlike Cout
 reg_opc_fe : process(clk)
 begin
 	if (clk'event and clk='0') then -- falling edge
