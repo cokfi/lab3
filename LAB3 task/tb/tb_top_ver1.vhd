@@ -4,12 +4,12 @@ use ieee.std_logic_arith.all;
 use ieee.std_logic_unsigned.all;
 USE work.aux_package.all;
 
-entity tb is
-	generic ( T : time := 100 ns);--Period time (switching every 50 ns)
+entity top_tb is
+	generic ( T : time := 50 ns);--Period time (switching every 25 ns)
     constant (n : integer : 8 );
-end tb;
+end top_tb;
 ----------------inputs/outputs---------------------------------------
-architecture rtb of tb is
+architecture ttb of top_tb is
 	signal clk,rst : std_logic;
 	signal DATAin, DATAout : std_logic_vector(n-1 downto 0); 
     signal Cout_spy : std_logic :='0'; --signal to follow Cout inside top
@@ -17,9 +17,9 @@ architecture rtb of tb is
     signal TrigR : boolean := true;--triggers reading from input file
     signal done : boolean := false;--turns true when reaching end of input file
     constant read_file_location : string(1:38) :=
-    "input file address";
+    "C:\Users\kfir\Documents\VHDL\lab3\LAB3 task\inputFile.txt";
     constant write_file_location : string(1:38) :=
-    "output file address";
+    "C:\Users\kfir\Documents\VHDL\lab3\LAB3 task\outputFile";
 
     begin
     L0 : top generic map (n) port map(clk,rst,DATAin,DATAout);
@@ -73,4 +73,4 @@ architecture rtb of tb is
             wait;
         end if;
         end process;
-end rtb;
+end ttb;

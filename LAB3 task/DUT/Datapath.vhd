@@ -37,6 +37,7 @@ begin
 		one_before_nor(i) <= counter(i);
 	end generate;
 	One <= nor one_before_nor;
+	reg_c<= reg_b; -- wired
 	--------------------------testing - delete later----------------------------
 	counter_out <=counter;
 	reg_b_out <= reg_b;
@@ -61,13 +62,7 @@ begin
 		if (OPCin='1') then --register OPC
 			reg_opc <= Opcode;
 		end if;
-		
-	end if;
-end process;
-reg_c<= reg_b; --Cin every operation cycle unlike Cout
-reg_opc_fe : process(clk)
-begin
-	if (clk'event and clk='0') then -- falling edge
+
 		if (Bin='1') then --register B
 			reg_b <= ALUout;
 		elsif (Cout='1') then --register C
