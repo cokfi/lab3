@@ -33,6 +33,7 @@ begin
 end generate;
 	One <= nor one_before_nor;
 
+
 ------------------------counter process--------------------------
 d_counter : process(clk)
 begin
@@ -45,22 +46,24 @@ begin
 	end if;
 end process;
 ------------------------Registers process--------------------------
+
 reg_opc_re : process(clk)
 begin
 	if (clk'event and clk='1') then -- rising edge
 		if (OPCin='1') then --register OPC
 			reg_opc <= Opcode;
 		end if;
-		reg_c<= reg_b; --Cin every operation cycle unlike Cout
+		if (Bin='1') then --register B
+			reg_b <= ALUout;
+		end if;
 	end if;
 end process;
-
+reg_c<= reg_b; --Cin every operation cycle unlike Cout
 reg_opc_fe : process(clk)
 begin
 	if (clk'event and clk='0') then -- falling edge
-		if (Bin='1') then --register B
-			reg_b <= ALUout;
-		elsif (Cout='1') then --register C
+
+		if (Cout='1') then --register C
 			DATAout <= reg_c; -- provide output
 		end if;
 	end if;

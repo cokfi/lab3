@@ -32,6 +32,7 @@ begin
         wait for 150 ns;--150 ns
         OPCin<='0';
         wait for 450 ns;
+        --wait for 50 ns;
         OPCin<='1';--600 ns
         wait;
     end process;
@@ -42,6 +43,7 @@ begin
         wait for 250 ns;--250 ns
         OPC2<='1';
         wait for 350 ns;--600 ns
+        --wait for 50 ns;
         OPC2<='0';
         wait;
     end process;
@@ -70,6 +72,7 @@ begin
         wait for 200 ns;--200 ns
         Bin<='1';
         wait for 400 ns;--600 ns
+       -- wait for 50 ns;
         Bin<='0';
         wait;
     end process;
@@ -78,6 +81,7 @@ begin
         Cout<='0';
         wait for 25 ns;
         wait for 600 ns;--600 ns
+        --wait for 50 ns;
         Cout <='1';
         wait;
     end process; 
