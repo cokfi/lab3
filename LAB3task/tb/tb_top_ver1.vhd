@@ -25,6 +25,13 @@ architecture ttb of top_tb is
     L0 : top generic map (n) port map(clk,rst,DATAin,DATAout);
     --Cout_spy <= <<signal .top_tb.top.Control.Cout : std_logic>>; -- '<< >>' calls for internal signals
     
+    reset : process
+        begin
+		  rst <= '1';
+		  wait for 5 ns ; --T/2 = 25 ns
+		  rst <= not rst;
+		  wait;
+        end process;
     gen_clk : process
         begin
 		  clk <= '0';
@@ -40,6 +47,7 @@ architecture ttb of top_tb is
             TrigR<=not(TrigR); -- =0
             wait for T/2 ; -- T/2 = 25 ns
             TrigR<=not(TrigR); -- =1
+            wait for T/4 ; --T/4 = 12.5 ns
         end process;
     
     ReadTrigger : process -- reading is triggered by TrigR rising edge
@@ -47,10 +55,14 @@ architecture ttb of top_tb is
         variable L : line;
         variable datainV : integer;
     begin
+        --if (TrigR'event and TrigR='1') then -- rising edge
             --wait for 25 ns;
-            if (not endfile(infile)) then --check if reached the end of input file
                 readline(infile,L); -- save line   
-                read(L,datainV); -- read element from line to datain
+                while (not endfile(infile)) loop--check if reached the end of input file
+                    read(L,datainV); -- read element from line to datain
+                    wait until (TrigR'event and TrigR=true);--Triggered by TrigR
+                    DATAin<=conv_std_logic_vector(datainV, n);
+                end loop;
                 --if (datainV/=0) then
                 --    idx_counter:= idx_counter+1;
                 --    if (idx_counter=2) then
@@ -59,14 +71,14 @@ architecture ttb of top_tb is
                 --        number_of_numbers = number_of_numbers-1;
                 --    end if;
                 --end if;
-            else    -- if reached the end of file
+            if (endfile(infile)) then   -- if reached the end of file
                 done <= true;
                 file_close(infile);
                 report "end of input file" severity note;
                 wait;
             end if;
-            wait until (TrigR'event and TrigR=true);--Triggered by TrigR
-            DATAin<=conv_std_logic_vector(datainV, n);
+
+        --end if;
     end process;
 
    
