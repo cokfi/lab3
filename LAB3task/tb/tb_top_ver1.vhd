@@ -13,17 +13,17 @@ end top_tb;
 architecture ttb of top_tb is
 	signal clk,rst : std_logic;
 	signal DATAin, DATAout : std_logic_vector(n-1 downto 0); 
-    signal Cout_spy : std_logic :='0'; --signal to follow Cout inside top
+    --signal Cout_spy : std_logic :='0'; --signal to follow Cout inside top
 ----------------read/write signals---------------------------------------
     signal TrigR : boolean := true;--triggers reading from input file
     signal done : boolean := false;--turns true when reaching end of input file
     constant read_file_location : string(1 to 56) :="C:\Users\kfir\Documents\VHDL\lab3\LAB3task\inputFile.txt";
     constant write_file_location : string(1 to 57) :="C:\Users\kfir\Documents\VHDL\lab3\LAB3task\outputFile.txt";
-
+    --variable idx_counter : integer :=0;
+    --variable number_of_numbers : integer;  
     begin
-    my_entity : entity work.my_entity(rtl)
     L0 : top generic map (n) port map(clk,rst,DATAin,DATAout);
-    Cout_spy <= <<signal .top_tb.top.Control.Cout : std_logic>>; -- '<< >>' calls for internal signals
+    --Cout_spy <= <<signal .top_tb.top.Control.Cout : std_logic>>; -- '<< >>' calls for internal signals
     
     gen_clk : process
         begin
@@ -51,6 +51,14 @@ architecture ttb of top_tb is
             if (not endfile(infile)) then --check if reached the end of input file
                 readline(infile,L); -- save line   
                 read(L,datainV); -- read element from line to datain
+                --if (datainV/=0) then
+                --    idx_counter:= idx_counter+1;
+                --    if (idx_counter=2) then
+                --        number_of_numbers:= datainV;
+                --    elsif (idx_counter>2) then
+                --        number_of_numbers = number_of_numbers-1;
+                --    end if;
+                --end if;
             else    -- if reached the end of file
                 done <= true;
                 file_close(infile);
@@ -63,17 +71,15 @@ architecture ttb of top_tb is
 
    
     
-    WriteTrigger : process--triggered by Cout falling edge, need to figure out how
+    WriteTrigger : process(DATAout)--triggered by DATAout 
         file outfile : text open write_mode is write_file_location;
         variable outline : line;
         begin
-        wait until(Cout_spy'event and Cout_spy='0');
-            write(outline, conv_integer(signed(DATAout)));
-            writeline(outfile,outline);
+        write(outline, conv_integer(signed(DATAout)));
+        writeline(outfile,outline);
             if (done = true) then
                 file_close(outfile);
                 report "finished writing to output file" severity note;
-            wait;
             end if;
         end process;
 end ttb;
