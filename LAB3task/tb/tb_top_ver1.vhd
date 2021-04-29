@@ -2,11 +2,12 @@ library IEEE;
 use ieee.std_logic_1164.all;
 use ieee.std_logic_arith.all;
 use ieee.std_logic_unsigned.all;
+use std.textio.all;
 USE work.aux_package.all;
 
 entity top_tb is
 	generic ( T : time := 50 ns);--Period time (switching every 25 ns)
-    constant (n : integer : 8 );
+    constant n : integer := 8 ;
 end top_tb;
 ----------------inputs/outputs---------------------------------------
 architecture ttb of top_tb is
@@ -16,39 +17,40 @@ architecture ttb of top_tb is
 ----------------read/write signals---------------------------------------
     signal TrigR : boolean := true;--triggers reading from input file
     signal done : boolean := false;--turns true when reaching end of input file
-    constant read_file_location : string(1:38) :=
-    "C:\Users\kfir\Documents\VHDL\lab3\LAB3 task\inputFile.txt";
-    constant write_file_location : string(1:38) :=
-    "C:\Users\kfir\Documents\VHDL\lab3\LAB3 task\outputFile";
+    constant read_file_location : string(1 to 56) :="C:\Users\kfir\Documents\VHDL\lab3\LAB3task\inputFile.txt";
+    constant write_file_location : string(1 to 57) :="C:\Users\kfir\Documents\VHDL\lab3\LAB3task\outputFile.txt";
 
     begin
+    my_entity : entity work.my_entity(rtl)
     L0 : top generic map (n) port map(clk,rst,DATAin,DATAout);
-    Cout_spy <= <<signal .tb.top.Control.Cout : std_logic>>; -- '<< >>' calls for internal signals
+    Cout_spy <= <<signal .top_tb.top.Control.Cout : std_logic>>; -- '<< >>' calls for internal signals
     
     gen_clk : process
         begin
 		  clk <= '0';
-		  wait for T/2 ns; --T/2 = 50 ns
+		  wait for T/2 ; --T/2 = 25 ns
 		  clk <= not clk;
-		  wait for T/2 ns;
+		  wait for T/2 ;
         end process;
     
-    gen_TrigR : process(clk'event and clk='1') --TrigR= clk(t-T/4), T=100ns => T/4=25 ns => TrigR=clk(t-25)
+    gen_TrigR : process --TrigR= clk(t-T/4), T=100ns => T/4=25 ns => TrigR=clk(t-25)
         begin
-            wait for T/4 ns; --T/4 = 25 ns
-            TrigR<=not(TrigR);
+            TrigR<= true;
+            wait for T/4 ; --T/4 = 12.5 ns
+            TrigR<=not(TrigR); -- =0
+            wait for T/2 ; -- T/2 = 25 ns
+            TrigR<=not(TrigR); -- =1
         end process;
     
-    ReadTrigger : process(clk'event and clk='1')
+    ReadTrigger : process -- reading is triggered by TrigR rising edge
         file infile : text open read_mode is read_file_location;
         variable L : line;
         variable datainV : integer;
-
-        begin
+    begin
             --wait for 25 ns;
-            if(not endfile) then --check if reached the end of input file
+            if (not endfile(infile)) then --check if reached the end of input file
                 readline(infile,L); -- save line   
-                read(L,datainV); -- read element from line
+                read(L,datainV); -- read element from line to datain
             else    -- if reached the end of file
                 done <= true;
                 file_close(infile);
@@ -56,21 +58,22 @@ architecture ttb of top_tb is
                 wait;
             end if;
             wait until (TrigR'event and TrigR=true);--Triggered by TrigR
-            DATAin<=to_stdlogicvector(datainV);
-        end process;
+            DATAin<=conv_std_logic_vector(datainV, n);
+    end process;
 
    
     
-    WriteTrigger : process(Cout_spy'event and Cout_spy='0')--triggered by Cout falling edge, need to figure out how
+    WriteTrigger : process--triggered by Cout falling edge, need to figure out how
         file outfile : text open write_mode is write_file_location;
         variable outline : line;
         begin
-            write(outline, signed(DATAout));
+        wait until(Cout_spy'event and Cout_spy='0');
+            write(outline, conv_integer(signed(DATAout)));
             writeline(outfile,outline);
-        if (done = true) then
-            file_close(outfile);
-            report "finished writing to output file" severity note;
+            if (done = true) then
+                file_close(outfile);
+                report "finished writing to output file" severity note;
             wait;
-        end if;
+            end if;
         end process;
 end ttb;
