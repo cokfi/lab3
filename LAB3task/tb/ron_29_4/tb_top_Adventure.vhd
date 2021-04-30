@@ -13,7 +13,7 @@ architecture ttb of top_tb is
 
 --inputs/outputs:
 	signal rst : std_logic;
-    signal clk:std_logic:='0';
+    signal clk:std_logic:='1';
 	signal DATAin, DATAout : std_logic_vector(n-1 downto 0); 
 	--------------------delete testing-------------------------
     signal Input,One : std_logic;

@@ -42,7 +42,7 @@ begin
 	counter_out <=counter;
 	reg_b_out <= reg_b;
 	reg_c_out <= reg_c;
-	opc_out<=ALUFN;
+	opc_out<=reg_opc;
 	----------------------------------------------------------------------------
 ------------------------counter process--------------------------
 d_counter : process(clk)
