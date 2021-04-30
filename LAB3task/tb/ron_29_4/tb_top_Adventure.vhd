@@ -32,7 +32,7 @@ architecture ttb of top_tb is
     "C:\Users\kfir\Documents\VHDL\lab3\LAB3task\outputFile.txt"; 
    
     begin
-    L0 : top generic map (n) port map(clk,rst,DATAin,DATAout,counter_out,reg_b_out,reg_c_out,opc_out,Input,One,OPCin,OPC2,OPC1,Ld,Bin,Cout);
+    L0 : top generic map (n) port map(rst,clk,DATAin,DATAout,counter_out,reg_b_out,reg_c_out,opc_out,Input,One,OPCin,OPC2,OPC1,Ld,Bin,Cout);
     
     clk <= not(clk) after T/2;   --infinite clock generation (Page 17 'file based sim')
     TrigR <= clk'delayed(T/4);    --TrigR defined as a delayed version of clk
