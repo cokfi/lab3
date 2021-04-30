@@ -23,7 +23,7 @@ package aux_package is
 	port(
 		rst,clk : in std_logic;
 		Input,One : in std_logic;
-		---------------------------------------------
+		----------------------------------------------
 		OPCin,OPC2,OPC1,Ld,Bin,Cout : out std_logic
 	);
   end component;

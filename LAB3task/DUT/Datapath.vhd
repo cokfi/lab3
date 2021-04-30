@@ -73,9 +73,9 @@ end process;
 -----------------------AdderSub---------------------------
 AdderSubaba : AdderSub generic map (n)port map(
 			sctr => ALUFN(1), --'1' SUB , '0' ADD
-			x => DATAin,
-			y => reg_b,
-			s => addersub_result);	
+			x => reg_b,
+			y => DATAin,
+			s => addersub_result);	-- if sub then S = X-Y
 -----------------------Logical----------------------------			
 Logiloko : Logical generic map (n) port map( -- x and y are crossed twice duo to a loko programmer
 			ALUFN => ALUFN(2)&ALUFN(0),

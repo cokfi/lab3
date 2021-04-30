@@ -19,7 +19,7 @@ begin
     L0 : Datapath generic map (n) port map(clk,OPCin,OPC2,OPC1,Ld,Bin,Cout,DATAin,Input,One,DATAout,counter_out,reg_b_out,reg_c_out,opc_out);
     
     
---------- start of stimulus section ------------------	
+--------- start of stimulus section ---------
     gen_clk : process
     begin
         clk <= '0';
