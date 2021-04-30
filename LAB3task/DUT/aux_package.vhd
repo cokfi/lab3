@@ -10,7 +10,12 @@ package aux_package is
 		rst,clk : in std_logic;
 		DATAin  : in std_logic_vector(n-1 downto 0);
 		---------------------------------------------
-		DATAout : out std_logic_vector(n-1 downto 0)
+		DATAout : out std_logic_vector(n-1 downto 0);
+				--------------------delete testing--------------------
+				counter_out,reg_b_out,reg_c_out: out STD_LOGIC_VECTOR(n-1 downto 0); -- testing
+				opc_out : out STD_LOGIC_VECTOR(2 downto 0);
+				Input_out,One_out,OPCin_out,OPC2_out,OPC1_out,Ld_out,Bin_out,Cout_out:out std_logic
+				------------------------------------------------------
 	);
   end component;
 ----------------------------Control------------------------------
