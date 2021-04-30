@@ -14,7 +14,7 @@ end Control;
 ------------- complete the Control Unit Architecture code --------------
 architecture arc_sys of Control is
 	type state is (Idle,SetN,First,Operate,Last,Done); 
-	signal state: state;
+	signal pre_state,next_state: state;
 begin
 ----Lower Section:-------------
 	process(rst,clk)
