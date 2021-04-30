@@ -58,6 +58,7 @@ architecture ttb of top_tb is
         file infile : text open read_mode is read_file_location;
         variable L : line;
         variable datainV : integer;
+        variable temp_endfile: boolean;
         begin
         readline(infile,L);                             -- Save line   
 --Read through current line:   
@@ -66,6 +67,7 @@ architecture ttb of top_tb is
             wait until (TrigR'event and TrigR='1');       -- Triggered by TrigR
             DATAin<=conv_std_logic_vector(datainV, n);  -- Insert reading
         end loop;
+        temp_endfile := endfile(infile);
         if (endfile(infile)) then                       -- Check if reached the end of file
             done <= true;                               -- Used in WriteTrigger
             file_close(infile);                         -- Close input file
