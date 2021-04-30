@@ -18,13 +18,14 @@ begin
         reset_init : process
             begin
             rst <= '1';
-            wait for 10 ns;
+            wait for 5 ns;
             rst<='0';
             wait;
             end process;
+
         gen_clk : process
             begin
-            clk <= '0';
+            clk <= '1';
             wait for 25 ns;
             clk <= not clk;
             wait for 25 ns;
@@ -33,7 +34,7 @@ begin
         SwitchInput : process
         begin
             Input <= '0';
-            wait for 50 ns;--50ns
+            wait for 62.5 ns;--50ns
             Input <= '1'; 
             wait for 500 ns;--550ns
             Input <= '0';
@@ -42,7 +43,7 @@ begin
         
         SwitchOne : process
         begin
-            One <= '0';
+            One <= 'U';
             wait for 250 ns;--250ns
             One <= '1';
             wait;

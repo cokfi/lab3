@@ -37,21 +37,23 @@ begin
 		one_before_nor(i) <= counter(i);
 	end generate;
 	One <= nor one_before_nor;
+	reg_c<= reg_b; -- wired
 	--------------------------testing - delete later----------------------------
 	counter_out <=counter;
 	reg_b_out <= reg_b;
 	reg_c_out <= reg_c;
-	opc_out<=ALUFN;
+	opc_out<=reg_opc;
 	----------------------------------------------------------------------------
 ------------------------counter process--------------------------
 d_counter : process(clk)
 begin
-	if (clk'event and clk='1') then -- rising edge
+	if (clk'event and clk='0') then -- rising edge
 		if (Ld ='1') then
 			counter <=DATAin;
 		elsif (Ld ='0') then
 			counter <= counter -1;
 		end if;	
+
 	end if;
 end process;
 ------------------------Registers process--------------------------
@@ -61,13 +63,6 @@ begin
 		if (OPCin='1') then --register OPC
 			reg_opc <= Opcode;
 		end if;
-		
-	end if;
-end process;
-reg_c<= reg_b; --Cin every operation cycle unlike Cout
-reg_opc_fe : process(clk)
-begin
-	if (clk'event and clk='0') then -- falling edge
 		if (Bin='1') then --register B
 			reg_b <= ALUout;
 		elsif (Cout='1') then --register C

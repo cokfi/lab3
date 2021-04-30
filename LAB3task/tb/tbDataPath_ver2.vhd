@@ -92,7 +92,7 @@ begin
 ---------Input Simulation ------------------	
     InputGen : process
     begin
-        wait for 37.5 ns; --TrigR = clk(t-T/4)= clk(t-12.5ns) hence, we read only after 37.5 ns
+        wait for 37.5 ns; --TrigR = clk(t-T/4)= clk(t-12.5ns) hence,the reading section starts only after 37.5 ns
         DATAin<=conv_std_logic_vector(0,n); -- 2 zeros at the start
         wait for 100 ns;
         DATAin<=conv_std_logic_vector(1,n);--Opcode for sum
