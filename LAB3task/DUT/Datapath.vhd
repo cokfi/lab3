@@ -47,12 +47,13 @@ begin
 ------------------------counter process--------------------------
 d_counter : process(clk)
 begin
-	if (clk'event and clk='1') then -- rising edge
+	if (clk'event and clk='0') then -- rising edge
 		if (Ld ='1') then
 			counter <=DATAin;
 		elsif (Ld ='0') then
 			counter <= counter -1;
 		end if;	
+
 	end if;
 end process;
 ------------------------Registers process--------------------------
@@ -62,7 +63,6 @@ begin
 		if (OPCin='1') then --register OPC
 			reg_opc <= Opcode;
 		end if;
-
 		if (Bin='1') then --register B
 			reg_b <= ALUout;
 		elsif (Cout='1') then --register C
