@@ -14,7 +14,7 @@ architecture ctb of tbControl is
 begin
     L0 : Control port map(rst,clk,Input,One,OPCin,OPC2,OPC1,Ld,Bin,Cout);
         
---------- start of stimulus section ------------------	
+--------- start of stimulus section -------------------	
         reset_init : process
             begin
             rst <= '1';

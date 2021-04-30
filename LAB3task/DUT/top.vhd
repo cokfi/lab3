@@ -8,7 +8,7 @@ entity top is
 	port(
 		rst,clk : in std_logic;
 		DATAin  : in std_logic_vector(n-1 downto 0);
-		---------------------------------------------
+		----------------------------------------------
 		DATAout : out std_logic_vector(n-1 downto 0);
 		--------------------delete testing--------------------
 		counter_out,reg_b_out,reg_c_out: out STD_LOGIC_VECTOR(n-1 downto 0); -- testing

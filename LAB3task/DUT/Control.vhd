@@ -16,7 +16,7 @@ architecture arc_sys of Control is
 	type state is (Idle,SetN,First,Operate,Last,Done); 
 	signal pr_state,nx_state: state;
 begin
-----Lower Section:-------------
+----Lower Section:--------------
 	process(rst,clk)
 	begin
 		if (rst='1') then
@@ -25,7 +25,7 @@ begin
 			pr_state <= nx_state;
 		end if;
 	end process;
-----Upper Section:-------------
+----Upper Section:--------------
 	process(Input,One,pr_state)
 	begin 
 			case pr_state is 

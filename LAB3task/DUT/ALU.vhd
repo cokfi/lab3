@@ -10,7 +10,7 @@ ENTITY ALU IS
 			vector_A,logical,addersub: IN STD_LOGIC_VECTOR (n-1 DOWNTO 0); -- Input
             ALUout: OUT STD_LOGIC_VECTOR(n-1 downto 0)); -- Result
 END ALU;
-------------------------------------------------------------------------
+-----------------------------------------------------------------------
 ARCHITECTURE dfl OF ALU IS
 signal reg_out:STD_LOGIC_VECTOR(n-1 downto 0); -- Result
 --signal ALUFN_A: STD_LOGIC_VECTOR(3 downto 0);-- [ALUFN,A]   , 1=Logical, 0= AdderSub.

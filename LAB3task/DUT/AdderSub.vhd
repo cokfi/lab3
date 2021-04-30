@@ -1,7 +1,7 @@
 LIBRARY ieee;
 USE ieee.std_logic_1164.all;
 USE work.aux_package.all;
----------------AdderSubtractor----------------------
+---------------AdderSubtractor-----------------------
 ENTITY AdderSub IS
   GENERIC (n : INTEGER := 8);
   PORT (    sctr: IN STD_LOGIC; -- subtractor control, '1' SUB , '0' ADD

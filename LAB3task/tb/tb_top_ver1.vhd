@@ -14,7 +14,7 @@ architecture ttb of top_tb is
 	signal clk,rst : std_logic;
 	signal DATAin, DATAout : std_logic_vector(n-1 downto 0); 
     --signal Cout_spy : std_logic :='0'; --signal to follow Cout inside top
-----------------read/write signals---------------------------------------
+----------------read/write signals-----------------------------------
     signal TrigR : boolean := true;--triggers reading from input file
     signal done : boolean := false;--turns true when reaching end of input file
     constant read_file_location : string(1 to 56) :="C:\Users\kfir\Documents\VHDL\lab3\LAB3task\inputFile.txt";

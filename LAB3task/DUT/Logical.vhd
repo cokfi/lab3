@@ -9,7 +9,7 @@ ENTITY Logical IS
             x: IN STD_LOGIC_VECTOR (n-1 DOWNTO 0); -- Input
             result: OUT STD_LOGIC_VECTOR(n-1 downto 0)); -- Result
 END Logical;
----------------------------------------------------------------
+--------------------------------------------------------------
 ARCHITECTURE dfl OF Logical IS
 begin
 -- The boolean Logic is in Documentation
