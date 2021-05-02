@@ -7,13 +7,13 @@ USE work.aux_package.all;
 
 entity top_tb is
 	generic ( T : time := 50 ns);--Period time (switching every 25 ns)
-    constant n : integer := 8 ;
+    constant n : integer := 20 ;
 end top_tb;
 architecture ttb of top_tb is
 
 --inputs/outputs:
 	signal rst : std_logic;
-    signal clk:std_logic:='1';
+    signal clk:std_logic:='0';
 	signal DATAin, DATAout : std_logic_vector(n-1 downto 0); 
 	--------------------delete testing-------------------------
     signal Input,One : std_logic;
@@ -25,7 +25,7 @@ architecture ttb of top_tb is
 
 
     signal TrigR : std_logic;                       --triggers reading from input file
-    signal done : boolean := false;                 --turns true when reaching end of input file
+    signal done : std_logic;                 --turns true when reaching end of input file
     constant read_file_location : string(1 to 56) :=
     "C:\Users\kfir\Documents\VHDL\lab3\LAB3task\inputFile.txt";
     constant write_file_location : string(1 to 57) :=
@@ -59,21 +59,30 @@ architecture ttb of top_tb is
         variable L : line;
         variable datainV : integer;
         variable temp_endfile: boolean;
+        variable temp_length: integer;
+        variable check_state_read :integer;
         begin
         readline(infile,L);                             -- Save line   
---Read through current line:   
-        while (L'length /= 0) loop                      -- Check if reached the end of L
+--Read through current line:
+        check_state_read:=1; 
+        temp_length := L'length;  
+        while (L'length > 1) loop                      -- Check if reached the end of L
             read(L,datainV);                            -- Read element from line to datainV
+            temp_length := L'length;
             wait until (TrigR'event and TrigR='1');     -- Triggered by TrigR
             DATAin<=conv_std_logic_vector(datainV, n);  -- Insert reading
+            check_state_read:=2;
         end loop;
+        check_state_read:=3;
         temp_endfile := endfile(infile);
-        if (endfile(infile)) then                       -- Check if reached the end of file
-            done <= true;                               -- Used in WriteTrigger
-            file_close(infile);                         -- Close input file
-            report "end of input file" severity note;   -- "End" message
-            wait;                                       -- Don't continue
-        end if;
+        wait for 1.5 ns;
+        --if (endfile(infile)) then                       -- Check if reached the end of file
+        done <= '1';                               -- Used in WriteTrigger
+        check_state_read:=4;
+        file_close(infile);                         -- Close input file
+        report "end of input file" severity note;   -- "End" message
+        wait;                                       -- Don't continue
+        --end if;
     end process;
 
 -------------------------------------------------------------------------------------------        
@@ -86,14 +95,44 @@ architecture ttb of top_tb is
     WriteTrigger : process                              
         file outfile : text open write_mode is write_file_location;
         variable outline : line;
+        variable check_stage_write : integer;
+        variable dataoutV : integer;
+        variable space_num : integer ;                       -- the number of spaces for each result writing 
+        variable devider : integer ; 
+        variable space_enable : boolean := true;            -- keep counting spaces           
         begin
-        while (Done /= true) loop                           -- See if we are still going through infile
-            wait until (DATAout'transaction='1');           -- Wait until a signal is assigned to DATAout
-            write(outline, conv_integer(signed(DATAout)));  -- Write current DATAout to line
+        check_stage_write :=1;
+        while (done /= '1') loop                            -- See if we are still going through infile
+            check_stage_write :=2;
+            space_num :=2;
+            devider := 10;
+            wait until (DATAout'event or done ='1');        -- Wait until a signal is assigned to DATAout
+             if (done ='1') then
+                exit;                                       -- Exit loop
+             end if;
+             dataoutV :=conv_integer(signed(DATAout));
+            check_stage_write :=3;
+            wait for 1 ns;  
+            if (dataoutV<0) then                            -- negative
+                space_num := space_num+1;                           
+                dataoutV:= dataoutV*(-1);
+            end if;
+            while  (space_enable) loop
+                if (devider>dataoutV) then
+                    exit;
+                end if;
+                devider:=devider*10;
+                space_num := space_num+1;
+            end loop;
+            write(outline, conv_integer(signed(DATAout)),left,space_num);  -- Write current DATAout to line
         end loop;
         writeline(outfile,outline);                         -- Write line to file
+        check_stage_write :=4;
+        wait for 1 ns;
+        --writeline(outfile,outline);                       -- Write line to file
         file_close(outfile);                                -- Close file
-        report "finished writing to output file" severity note;    
+        report "finished writing to output file" severity note;
+        wait;    
     end process;
 end ttb;
 

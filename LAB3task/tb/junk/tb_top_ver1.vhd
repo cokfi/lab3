@@ -63,6 +63,7 @@ architecture ttb of top_tb is
                     wait until (TrigR'event and TrigR=true);--Triggered by TrigR
                     DATAin<=conv_std_logic_vector(datainV, n);
                 end loop;
+                
                 --if (datainV/=0) then
                 --    idx_counter:= idx_counter+1;
                 --    if (idx_counter=2) then
