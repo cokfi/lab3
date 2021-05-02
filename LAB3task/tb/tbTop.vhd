@@ -52,9 +52,9 @@ architecture ttb of top_tb is
         file infile : text open read_mode is read_file_location;
         variable L : line;
         variable datainV : integer;
-        variable temp_endfile: boolean;                 
+        variable temp_endfile: boolean;                 -- testing wire              
         variable temp_length: integer;                  -- testing wire
-        variable check_state_read :integer;
+        variable check_state_read :integer;             -- testing wire
         begin
         readline(infile,L);                             -- Save line   
 --Read through current line:
@@ -69,14 +69,14 @@ architecture ttb of top_tb is
         end loop;
         check_state_read:=3;
         temp_endfile := endfile(infile);
-        wait for 1.5 ns;
-        --if (endfile(infile)) then                     -- Check if reached the end of file
+        wait for 1.5 ns;                                -- wait to see locals state in modelsim
+        if (endfile(infile)) then                       -- Check if reached the end of file
         done <= '1';                                    -- Used in WriteTrigger
         check_state_read:=4;
         file_close(infile);                             -- Close input file
         report "end of input file" severity note;       -- "End" message
         wait;                                           -- Don't continue
-        --end if;
+        end if;
     end process;
 
 -------------------------------------------------------------------------------------------        
@@ -89,11 +89,11 @@ architecture ttb of top_tb is
     WriteTrigger : process                              
         file outfile : text open write_mode is write_file_location;
         variable outline : line;
-        variable check_stage_write : integer;
-        variable dataoutV : integer;
-        variable space_num : integer ;                       -- the number of spaces for each result writing 
+        variable check_stage_write : integer;               -- testing wire
+        variable dataoutV : integer;                        
+        variable space_num : integer ;                      -- the number of spaces for each result writing 
         variable devider : integer ; 
-        variable space_enable : boolean := true;            -- keep counting spaces           
+        variable space_enable : boolean := true;            -- keep counting increasing number of spaces           
         begin
         check_stage_write :=1;
         while (done /= '1') loop                            -- See if we are still going through infile
@@ -106,12 +106,12 @@ architecture ttb of top_tb is
              end if;
              dataoutV :=conv_integer(signed(DATAout));
             check_stage_write :=3;
-            wait for 1 ns;  
-            if (dataoutV<0) then                            -- negative
+            wait for 1 ns;                                  -- wait to see locals state in modelsim
+            if (dataoutV<0) then                            -- negative , "-"  require an extra spot
                 space_num := space_num+1;                           
                 dataoutV:= dataoutV*(-1);
             end if;
-            while  (space_enable) loop
+            while  (space_enable) loop                      -- increase number of spaces
                 if (devider>dataoutV) then
                     exit;
                 end if;
@@ -122,7 +122,7 @@ architecture ttb of top_tb is
         end loop;
         writeline(outfile,outline);                         -- Write line to file
         check_stage_write :=4;
-        wait for 1 ns;
+        wait for 1 ns;                                      -- wait to see locals state in modelsim
         --writeline(outfile,outline);                       -- Write line to file
         file_close(outfile);                                -- Close file
         report "finished writing to output file" severity note;
