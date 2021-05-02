@@ -15,12 +15,6 @@ architecture ttb of top_tb is
 	signal rst : std_logic;
     signal clk:std_logic:='0';
 	signal DATAin, DATAout : std_logic_vector(n-1 downto 0); 
-	--------------------delete testing-------------------------
-    signal Input,One : std_logic;
-	signal OPCin,OPC2,OPC1,Ld,Bin,Cout : std_logic;
-    signal counter_out,reg_b_out,reg_c_out:STD_LOGIC_VECTOR(n-1 downto 0); -- testing
-	signal opc_out : STD_LOGIC_VECTOR(2 downto 0);
-    -----------------------------------------------------------
 --read/write signals:
 
 
@@ -32,7 +26,7 @@ architecture ttb of top_tb is
     "C:\Users\kfir\Documents\VHDL\lab3\LAB3task\outputFile.txt"; 
    
     begin
-    L0 : top generic map (n) port map(rst,clk,DATAin,DATAout,counter_out,reg_b_out,reg_c_out,opc_out,Input,One,OPCin,OPC2,OPC1,Ld,Bin,Cout);
+    L0 : top generic map (n) port map(rst,clk,DATAin,DATAout);
     
     clk <= not(clk) after T/2;    --infinite clock generation (Page 17 'file based sim')
     TrigR <= clk'delayed(T/4);    --TrigR defined as a delayed version of clk
@@ -58,15 +52,15 @@ architecture ttb of top_tb is
         file infile : text open read_mode is read_file_location;
         variable L : line;
         variable datainV : integer;
-        variable temp_endfile: boolean;
-        variable temp_length: integer;
+        variable temp_endfile: boolean;                 
+        variable temp_length: integer;                  -- testing wire
         variable check_state_read :integer;
         begin
         readline(infile,L);                             -- Save line   
 --Read through current line:
         check_state_read:=1; 
         temp_length := L'length;  
-        while (L'length > 1) loop                      -- Check if reached the end of L
+        while (L'length > 1) loop                       -- Check if reached the end of L
             read(L,datainV);                            -- Read element from line to datainV
             temp_length := L'length;
             wait until (TrigR'event and TrigR='1');     -- Triggered by TrigR
@@ -76,12 +70,12 @@ architecture ttb of top_tb is
         check_state_read:=3;
         temp_endfile := endfile(infile);
         wait for 1.5 ns;
-        --if (endfile(infile)) then                       -- Check if reached the end of file
-        done <= '1';                               -- Used in WriteTrigger
+        --if (endfile(infile)) then                     -- Check if reached the end of file
+        done <= '1';                                    -- Used in WriteTrigger
         check_state_read:=4;
-        file_close(infile);                         -- Close input file
-        report "end of input file" severity note;   -- "End" message
-        wait;                                       -- Don't continue
+        file_close(infile);                             -- Close input file
+        report "end of input file" severity note;       -- "End" message
+        wait;                                           -- Don't continue
         --end if;
     end process;
 

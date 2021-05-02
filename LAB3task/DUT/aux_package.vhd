@@ -10,13 +10,7 @@ package aux_package is
 		rst,clk : in std_logic;
 		DATAin  : in std_logic_vector(n-1 downto 0);
 		---------------------------------------------
-		DATAout : out std_logic_vector(n-1 downto 0);
-				--------------------delete testing--------------------
-				counter_out,reg_b_out,reg_c_out: out STD_LOGIC_VECTOR(n-1 downto 0); -- testing
-				opc_out : out STD_LOGIC_VECTOR(2 downto 0);
-				Input_out,One_out,OPCin_out,OPC2_out,OPC1_out,Ld_out,Bin_out,Cout_out:out std_logic
-				------------------------------------------------------
-	);
+		DATAout : out std_logic_vector(n-1 downto 0));
   end component;
 ----------------------------Control------------------------------
   component Control is
@@ -24,8 +18,7 @@ package aux_package is
 		rst,clk : in std_logic;
 		Input,One : in std_logic;
 		----------------------------------------------
-		OPCin,OPC2,OPC1,Ld,Bin,Cout : out std_logic
-	);
+		OPCin,OPC2,OPC1,Ld,Bin,Cout : out std_logic);
   end component;
 ----------------------------Datapath---------------------------	
   component Datapath is
@@ -36,17 +29,14 @@ package aux_package is
 		DATAin  : in std_logic_vector(n-1 downto 0);
 		---------------------------------------------
 		Input,One : out std_logic;
-		DATAout : out std_logic_vector(n-1 downto 0);
-		counter_out,reg_b_out,reg_c_out: out STD_LOGIC_VECTOR(n-1 downto 0); -- testing
-		opc_out : out STD_LOGIC_VECTOR(2 downto 0)
-	);
+		DATAout : out std_logic_vector(n-1 downto 0));
   end component;
 ---------------------------ALU---------------------------------
 	component ALU is
 	GENERIC (n : INTEGER := 8);     
 	PORT (    ALUFN: IN STD_LOGIC_VECTOR (2 DOWNTO 0); 
 			  --ALUFN := [0,0,0]=A ,[0,0,1]=A+B, [0,1,0]=A-B, [0,1,1]=AorB, [1,0,0]= AandB, [1,0,1]=AxorB 
-			  A : IN STD_LOGIC; -- set ALUout as vector_A
+			  A : IN STD_LOGIC; -- set ALUout as vector_A (OPC1)
 			  vector_A,logical,addersub: IN STD_LOGIC_VECTOR (n-1 DOWNTO 0); -- Input
 			  ALUout: OUT STD_LOGIC_VECTOR(n-1 downto 0)); -- Result
 	end component;	
@@ -72,9 +62,5 @@ package aux_package is
 	end component;	
 ----------------------------------------------------------------
 
-  
-  
-  
-  
 end aux_package;
 

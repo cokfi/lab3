@@ -11,9 +11,7 @@ entity Datapath is
 		DATAin  : in std_logic_vector(n-1 downto 0);
 		---------------------------------------------
 		Input,One : out std_logic;
-		DATAout : out std_logic_vector(n-1 downto 0);
-		counter_out,reg_b_out,reg_c_out: out STD_LOGIC_VECTOR(n-1 downto 0); -- testing
-		opc_out : out STD_LOGIC_VECTOR(2 downto 0)
+		DATAout : out std_logic_vector(n-1 downto 0)
 	);
 end Datapath;
 ------------- complete the Datapath Unit Architecture code --------------
@@ -38,12 +36,6 @@ begin
 	end generate;
 	One <= nor one_before_nor;
 	reg_c<= reg_b; -- wired
-	--------------------------testing - delete later----------------------------
-	counter_out <=counter;
-	reg_b_out <= reg_b;
-	reg_c_out <= reg_c;
-	opc_out<=reg_opc;
-	----------------------------------------------------------------------------
 ------------------------counter process--------------------------
 d_counter : process(clk)
 begin

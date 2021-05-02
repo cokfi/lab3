@@ -13,10 +13,8 @@ end tbDataPath;
 architecture dtb of tbDataPath is
 	signal clk,Input,One,OPCin,OPC2,OPC1,Ld,Bin,Cout : std_logic;
 	signal DATAin, DATAout : std_logic_vector(n-1 downto 0); -- Note: Consider changin type to int
-    signal counter_out,reg_b_out,reg_c_out: STD_LOGIC_VECTOR(n-1 downto 0); -- testing
-    signal opc_out : STD_LOGIC_VECTOR(2 downto 0); -- testing
 begin
-    L0 : Datapath generic map (n) port map(clk,OPCin,OPC2,OPC1,Ld,Bin,Cout,DATAin,Input,One,DATAout,counter_out,reg_b_out,reg_c_out,opc_out);
+    L0 : Datapath generic map (n) port map(clk,OPCin,OPC2,OPC1,Ld,Bin,Cout,DATAin,Input,One,DATAout);
     
     
 --------- start of stimulus section ---------
