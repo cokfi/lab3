@@ -7,7 +7,7 @@ USE work.aux_package.all;
 
 entity top_tb is
 	generic ( T : time := 50 ns);--Period time (switching every 25 ns)
-    constant n : integer := 20 ;
+    constant n : integer := 32 ;
 end top_tb;
 architecture ttb of top_tb is
 

@@ -1,0 +1,10 @@
+T = 50 ns
+DATAin = UUUUUUUUUUUUUUUUUUUU
+DATAout = UUUUUUUUUUUUUUUUUUUU
+TrigR = U
+clk = 0
+done = U
+n = 20
+read_file_location = C:\Users\kfir\Documents\VHDL\lab3\LAB3task\inputFile.txt
+rst = U
+write_file_location = C:\Users\kfir\Documents\VHDL\lab3\LAB3task\outputFile.txt

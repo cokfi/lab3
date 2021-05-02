@@ -1,0 +1,12 @@
+n = 8
+Bin = U
+Cout = U
+DATAin = UUUUUUUU
+DATAout = UUUUUUUU
+Input = U
+Ld = U
+OPC1 = U
+OPC2 = U
+OPCin = U
+One = U
+clk = U
