@@ -34,7 +34,7 @@ architecture ttb of top_tb is
     begin
     L0 : top generic map (n) port map(rst,clk,DATAin,DATAout,counter_out,reg_b_out,reg_c_out,opc_out,Input,One,OPCin,OPC2,OPC1,Ld,Bin,Cout);
     
-    clk <= not(clk) after T/2;   --infinite clock generation (Page 17 'file based sim')
+    clk <= not(clk) after T/2;    --infinite clock generation (Page 17 'file based sim')
     TrigR <= clk'delayed(T/4);    --TrigR defined as a delayed version of clk
 
 --initialize and switch reset:
@@ -58,14 +58,16 @@ architecture ttb of top_tb is
         file infile : text open read_mode is read_file_location;
         variable L : line;
         variable datainV : integer;
+        variable temp_endfile: boolean;
         begin
         readline(infile,L);                             -- Save line   
 --Read through current line:   
         while (L'length /= 0) loop                      -- Check if reached the end of L
             read(L,datainV);                            -- Read element from line to datainV
-            wait until (TrigR'event and TrigR='1');       -- Triggered by TrigR
+            wait until (TrigR'event and TrigR='1');     -- Triggered by TrigR
             DATAin<=conv_std_logic_vector(datainV, n);  -- Insert reading
         end loop;
+        temp_endfile := endfile(infile);
         if (endfile(infile)) then                       -- Check if reached the end of file
             done <= true;                               -- Used in WriteTrigger
             file_close(infile);                         -- Close input file
@@ -86,7 +88,7 @@ architecture ttb of top_tb is
         variable outline : line;
         begin
         while (Done /= true) loop                           -- See if we are still going through infile
-            wait until (DATAout'transaction='1');               -- Wait until a signal is assigned to DATAout
+            wait until (DATAout'transaction='1');           -- Wait until a signal is assigned to DATAout
             write(outline, conv_integer(signed(DATAout)));  -- Write current DATAout to line
         end loop;
         writeline(outfile,outline);                         -- Write line to file
