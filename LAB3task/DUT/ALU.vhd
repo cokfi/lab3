@@ -13,12 +13,9 @@ END ALU;
 -----------------------------------------------------------------------
 ARCHITECTURE dfl OF ALU IS
 signal reg_out:STD_LOGIC_VECTOR(n-1 downto 0); -- Result
---signal ALUFN_A: STD_LOGIC_VECTOR(3 downto 0);-- [ALUFN,A]   , 1=Logical, 0= AdderSub.
+
 begin
-    --setALUFNandA : for i in 0 to 2 generate
-	--	ALUFN_A(i)<=ALUFN(i);
-	--end generate;
-    --ALUFN_A(3) <= A;
+
     out_select : process (ALUFN,A, vector_A, logical,addersub) is
     begin
     case ALUFN is
