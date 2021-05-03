@@ -18,7 +18,7 @@ architecture ttb of top_tb is
 --read/write signals:
 
 
-    signal TrigR : std_logic;                       --triggers reading from input file
+    signal TrigR : std_logic;                     --triggers reading from input file
     signal done : std_logic:='0';                 --turns '1' when reaching end of input file
     constant read_file_location : string(1 to 56) :=
     "C:\Users\kfir\Documents\VHDL\lab3\LAB3task\inputFile.txt";
