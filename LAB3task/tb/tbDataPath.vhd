@@ -28,8 +28,9 @@ begin
 ---------Control Simulation ------------------	State Path: Idle => SetN => First => ALU(x7) => Done
     OPCinSim : process
     begin  
-        OPCin<='1';
+        OPCin<='U';
         wait for 25 ns;
+        OPCin<='1';
         wait for 150 ns;--150 ns
         OPCin<='0';
         wait for 450 ns;
@@ -60,11 +61,10 @@ begin
     begin
         --Ld <='1';
         --wait;
-        Ld<='0';
+        Ld<='U';
         wait for 25 ns;
-        wait for 200 ns;--150 ns
         Ld<='1';
-        wait for 50 ns;--200 ns
+        wait for 200 ns;--225 ns
         Ld<='0';
         wait;
     end process;
