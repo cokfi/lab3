@@ -55,6 +55,7 @@ architecture ttb of top_tb is
         variable temp_endfile: boolean;                 -- testing wire              
         variable temp_length: integer;                  -- testing wire
         variable check_state_read :integer;             -- testing wire
+        variable
         begin
         readline(infile,L);                             -- Save line   
 --Read through current line:
