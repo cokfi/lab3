@@ -13,7 +13,7 @@ entity Control is
 end Control;
 ------------- complete the Control Unit Architecture code --------------
 architecture arc_sys of Control is
-	type state is (Idle,SetN,First,Operate,Last,Done); 
+	type state is (Idle,SetN,First,Operate,Last,Done,Error); 
 	signal pr_state,nx_state: state;
 begin
 ----Lower Section:--------------
@@ -33,7 +33,7 @@ begin
 					OPCin<='1';
 					OPC2<='0';
 					OPC1<='0';
-					Ld<='1';
+					Ld<='0';
 					Bin<='0';
 					Cout<='0';
 					if (Input='1') then
@@ -49,7 +49,11 @@ begin
 					Ld<='1';
 					Bin<='0';
 					Cout<='0';
-					nx_state <= First;
+					if (One = '1') then
+						nx_state<=Error;
+					else
+						nx_state <= First;
+					end if;
 							
 				when First =>
 					OPCin<='0';
@@ -98,6 +102,17 @@ begin
 					else
 						nx_state<=Idle;
 					end if;
+
+					when Error =>
+					OPCin<='0';
+					OPC2<='0';
+					OPC1<='1';
+					Ld<='0';
+					Bin<='1';
+					Cout<='0';
+
+					nx_state<=Done;
+
 			end case;
 	end process;
 end arc_sys;
