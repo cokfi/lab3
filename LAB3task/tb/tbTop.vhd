@@ -45,7 +45,7 @@ architecture ttb of top_tb is
 -- so we make a loop checking the length of the current line (line is of access string
 -- type so it changes dynamically) and it has 0 length when reaching the end of current line.
 --(see VHDL Golden ref page 117 Tips)
--------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------
 
 --Read:
     ReadTrigger : process 
