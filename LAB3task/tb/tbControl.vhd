@@ -34,9 +34,9 @@ begin
         SwitchInput : process
         begin
             Input <= '0';
-            wait for 62.5 ns;--50ns
+            wait for 62.5 ns;-- trigR's raising edge
             Input <= '1'; 
-            wait for 500 ns;--550ns
+            wait for 500 ns;--562.5ns
             Input <= '0';
             wait;
         end process;
@@ -44,7 +44,9 @@ begin
         SwitchOne : process
         begin
             One <= 'U';
-            wait for 250 ns;--250ns
+            wait for 12.5 ns;--reading starts
+            One <= '0';
+            wait for 312.5 ns;--325 ns falling edge
             One <= '1';
             wait;
         end process;
