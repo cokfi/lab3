@@ -20,12 +20,13 @@ architecture ttb of top_tb is
 
     signal TrigR : std_logic;                       --triggers reading from input file
     signal done : std_logic;                 --turns true when reaching end of input file
+    signal write_enable : std_logic:='0';
     constant read_file_location : string(1 to 56) :=
     "C:\Users\kfir\Documents\VHDL\lab3\LAB3task\inputFile.txt";
     constant write_file_location : string(1 to 57) :=
     "C:\Users\kfir\Documents\VHDL\lab3\LAB3task\outputFile.txt"; 
    
-    begin
+begin
     L0 : top generic map (n) port map(rst,clk,DATAin,DATAout);
     
     clk <= not(clk) after T/2;    --infinite clock generation (Page 17 'file based sim')
@@ -33,12 +34,12 @@ architecture ttb of top_tb is
 
 --initialize and switch reset:
     reset : process         
-        begin
+    begin
 		  rst <= '1';
 		  wait for 5 ns ; 
 		  rst <= not rst;
 		  wait;
-        end process;
+    end process;
 
 -------------------------------------------------------------------------------------------        
 -- Read Trigger Explenation: if there is only one line then endfile is true immediatly
@@ -55,12 +56,12 @@ architecture ttb of top_tb is
         variable temp_endfile: boolean;                 -- testing wire              
         variable temp_length: integer;                  -- testing wire
         variable check_state_read :integer;             -- testing wire
-        variable
-        begin
+    begin
         readline(infile,L);                             -- Save line   
---Read through current line:
+                                                        --Read through current line:
         check_state_read:=1; 
         temp_length := L'length;  
+        
         while (L'length > 1) loop                       -- Check if reached the end of L
             read(L,datainV);                            -- Read element from line to datainV
             temp_length := L'length;
@@ -68,6 +69,7 @@ architecture ttb of top_tb is
             DATAin<=conv_std_logic_vector(datainV, n);  -- Insert reading
             check_state_read:=2;
         end loop;
+        
         check_state_read:=3;
         temp_endfile := endfile(infile);
         wait for 1.5 ns;                                -- wait to see locals state in modelsim
@@ -78,6 +80,7 @@ architecture ttb of top_tb is
         report "end of input file" severity note;       -- "End" message
         wait;                                           -- Don't continue
         end if;
+    
     end process;
 
 -------------------------------------------------------------------------------------------        
@@ -93,41 +96,49 @@ architecture ttb of top_tb is
         variable check_stage_write : integer;               -- testing wire
         variable dataoutV : integer;                        
         variable space_num : integer ;                      -- the number of spaces for each result writing 
-        variable devider : integer ; 
+        variable divider : integer ; 
         variable space_enable : boolean := true;            -- keep counting increasing number of spaces           
-        begin
+        variable transaction_pre_value : bit;
+    begin
         check_stage_write :=1;
+        transaction_pre_value:= DATAout'transaction;
+        
         while (done /= '1') loop                            -- See if we are still going through infile
             check_stage_write :=2;
             space_num :=2;
-            devider := 10;
-            wait until (DATAout'event or done ='1');        -- Wait until a signal is assigned to DATAout
-             if (done ='1') then
+            divider := 10;
+            
+            wait until (DATAout'transaction /=transaction_pre_value or done ='1');        -- Wait until a signal is assigned to DATAout
+            if (done ='1') then
                 exit;                                       -- Exit loop
-             end if;
-             dataoutV :=conv_integer(signed(DATAout));
+            end if;
+            transaction_pre_value := DATAout'transaction;
+            dataoutV :=conv_integer(signed(DATAout));
             check_stage_write :=3;
             wait for 1 ns;                                  -- wait to see locals state in modelsim
             if (dataoutV<0) then                            -- negative , "-"  require an extra spot
                 space_num := space_num+1;                           
                 dataoutV:= dataoutV*(-1);
             end if;
+            
             while  (space_enable) loop                      -- increase number of spaces
-                if (devider>dataoutV) then
+                if (divider>dataoutV) then
                     exit;
                 end if;
-                devider:=devider*10;
+                divider:=divider*10;
                 space_num := space_num+1;
             end loop;
+            
             write(outline, conv_integer(signed(DATAout)),left,space_num);  -- Write current DATAout to line
         end loop;
+
         writeline(outfile,outline);                         -- Write line to file
         check_stage_write :=4;
         wait for 1 ns;                                      -- wait to see locals state in modelsim
-        --writeline(outfile,outline);                       -- Write line to file
         file_close(outfile);                                -- Close file
         report "finished writing to output file" severity note;
         wait;    
+    
     end process;
 end ttb;
 
